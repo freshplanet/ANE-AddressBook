@@ -1,0 +1,19 @@
+//
+// Prefix header for all source files of the 'AirAddressBook' target in the 'AirAddressBook' project
+//
+
+#ifdef __OBJC__
+    #import <Foundation/Foundation.h>
+    #import <Foundation/Foundation.h>
+    #import <AddressBook/AddressBook.h>
+    #import <addressBookUI/AddressBookUI.h>
+    #define DEFINE_ANE_FUNCTION(fn) FREObject (fn)(FREContext context, void* functionData, uint32_t argc, FREObject argv[])
+    #ifdef DEBUG
+    #   define DLog(fmt, ...) NSLog((@"%s [Line %d] " fmt), __PRETTY_FUNCTION__, __LINE__, ##__VA_ARGS__)
+    #else
+    #   define DLog(...)
+    #endif
+
+    // ALog always displays output regardless of the DEBUG setting
+    #define ALog(fmt, ...) NSLog((@"%s [Line %d] " fmt), __PRETTY_FUNCTION__, __LINE__, ##__VA_ARGS__)
+#endif

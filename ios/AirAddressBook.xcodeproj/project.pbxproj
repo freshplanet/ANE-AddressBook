@@ -1,0 +1,268 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		E2014CA717B58CEB0098FAB6 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E2014CA617B58CEB0098FAB6 /* Foundation.framework */; };
+		E2014CAE17B58CEB0098FAB6 /* AirAddressBook.m in Sources */ = {isa = PBXBuildFile; fileRef = E2014CAD17B58CEB0098FAB6 /* AirAddressBook.m */; };
+		E2815D7217BBE053009878DB /* AddressBook.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E2815D7117BBE053009878DB /* AddressBook.framework */; };
+		E2815D7417BBE58C009878DB /* FlashRuntimeExtensions.h in Headers */ = {isa = PBXBuildFile; fileRef = E2014CCF17B58F1D0098FAB6 /* FlashRuntimeExtensions.h */; };
+		E2815D7517BBE58C009878DB /* AirAddressBook.h in Headers */ = {isa = PBXBuildFile; fileRef = E2014CAB17B58CEB0098FAB6 /* AirAddressBook.h */; };
+		E2815D7717BBE58C009878DB /* AirAddressBook-Prefix.pch in Headers */ = {isa = PBXBuildFile; fileRef = E2014CAA17B58CEB0098FAB6 /* AirAddressBook-Prefix.pch */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		E2014CA317B58CEB0098FAB6 /* libAirAddressBook.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libAirAddressBook.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		E2014CA617B58CEB0098FAB6 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
+		E2014CAA17B58CEB0098FAB6 /* AirAddressBook-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "AirAddressBook-Prefix.pch"; sourceTree = "<group>"; };
+		E2014CAB17B58CEB0098FAB6 /* AirAddressBook.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AirAddressBook.h; sourceTree = "<group>"; };
+		E2014CAD17B58CEB0098FAB6 /* AirAddressBook.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AirAddressBook.m; sourceTree = "<group>"; };
+		E2014CB517B58CEC0098FAB6 /* SenTestingKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SenTestingKit.framework; path = Library/Frameworks/SenTestingKit.framework; sourceTree = DEVELOPER_DIR; };
+		E2014CCF17B58F1D0098FAB6 /* FlashRuntimeExtensions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FlashRuntimeExtensions.h; sourceTree = "<group>"; };
+		E2815D7117BBE053009878DB /* AddressBook.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AddressBook.framework; path = System/Library/Frameworks/AddressBook.framework; sourceTree = SDKROOT; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		E2014CA017B58CEB0098FAB6 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				E2815D7217BBE053009878DB /* AddressBook.framework in Frameworks */,
+				E2014CA717B58CEB0098FAB6 /* Foundation.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		E2014C9A17B58CEB0098FAB6 = {
+			isa = PBXGroup;
+			children = (
+				E2815D7117BBE053009878DB /* AddressBook.framework */,
+				E2014CA817B58CEB0098FAB6 /* AirAddressBook */,
+				E2014CA517B58CEB0098FAB6 /* Frameworks */,
+				E2014CA417B58CEB0098FAB6 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		E2014CA417B58CEB0098FAB6 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				E2014CA317B58CEB0098FAB6 /* libAirAddressBook.a */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		E2014CA517B58CEB0098FAB6 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				E2014CA617B58CEB0098FAB6 /* Foundation.framework */,
+				E2014CB517B58CEC0098FAB6 /* SenTestingKit.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		E2014CA817B58CEB0098FAB6 /* AirAddressBook */ = {
+			isa = PBXGroup;
+			children = (
+				E2014CCF17B58F1D0098FAB6 /* FlashRuntimeExtensions.h */,
+				E2014CAB17B58CEB0098FAB6 /* AirAddressBook.h */,
+				E2014CAD17B58CEB0098FAB6 /* AirAddressBook.m */,
+				E2014CA917B58CEB0098FAB6 /* Supporting Files */,
+			);
+			path = AirAddressBook;
+			sourceTree = "<group>";
+		};
+		E2014CA917B58CEB0098FAB6 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				E2014CAA17B58CEB0098FAB6 /* AirAddressBook-Prefix.pch */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXHeadersBuildPhase section */
+		E2815D7317BBE579009878DB /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				E2815D7417BBE58C009878DB /* FlashRuntimeExtensions.h in Headers */,
+				E2815D7517BBE58C009878DB /* AirAddressBook.h in Headers */,
+				E2815D7717BBE58C009878DB /* AirAddressBook-Prefix.pch in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXHeadersBuildPhase section */
+
+/* Begin PBXNativeTarget section */
+		E2014CA217B58CEB0098FAB6 /* AirAddressBook */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = E2014CC817B58CEC0098FAB6 /* Build configuration list for PBXNativeTarget "AirAddressBook" */;
+			buildPhases = (
+				E2014C9F17B58CEB0098FAB6 /* Sources */,
+				E2014CA017B58CEB0098FAB6 /* Frameworks */,
+				E2815D7317BBE579009878DB /* Headers */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = AirAddressBook;
+			productName = AirAddressBook;
+			productReference = E2014CA317B58CEB0098FAB6 /* libAirAddressBook.a */;
+			productType = "com.apple.product-type.library.static";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		E2014C9B17B58CEB0098FAB6 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0460;
+				ORGANIZATIONNAME = Freshplanet;
+			};
+			buildConfigurationList = E2014C9E17B58CEB0098FAB6 /* Build configuration list for PBXProject "AirAddressBook" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+			);
+			mainGroup = E2014C9A17B58CEB0098FAB6;
+			productRefGroup = E2014CA417B58CEB0098FAB6 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				E2014CA217B58CEB0098FAB6 /* AirAddressBook */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXSourcesBuildPhase section */
+		E2014C9F17B58CEB0098FAB6 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				E2014CAE17B58CEB0098FAB6 /* AirAddressBook.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		E2014CC617B58CEC0098FAB6 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 6.1;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+			};
+			name = Debug;
+		};
+		E2014CC717B58CEC0098FAB6 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 6.1;
+				SDKROOT = iphoneos;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		E2014CC917B58CEC0098FAB6 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_CXX_LANGUAGE_STANDARD = "compiler-default";
+				CLANG_CXX_LIBRARY = "compiler-default";
+				DSTROOT = /tmp/AirAddressBook.dst;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "AirAddressBook/AirAddressBook-Prefix.pch";
+				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
+				OTHER_LDFLAGS = "-ObjC";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		E2014CCA17B58CEC0098FAB6 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_CXX_LANGUAGE_STANDARD = "compiler-default";
+				CLANG_CXX_LIBRARY = "compiler-default";
+				DSTROOT = /tmp/AirAddressBook.dst;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "AirAddressBook/AirAddressBook-Prefix.pch";
+				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
+				OTHER_LDFLAGS = "-ObjC";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		E2014C9E17B58CEB0098FAB6 /* Build configuration list for PBXProject "AirAddressBook" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				E2014CC617B58CEC0098FAB6 /* Debug */,
+				E2014CC717B58CEC0098FAB6 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		E2014CC817B58CEC0098FAB6 /* Build configuration list for PBXNativeTarget "AirAddressBook" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				E2014CC917B58CEC0098FAB6 /* Debug */,
+				E2014CCA17B58CEC0098FAB6 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = E2014C9B17B58CEB0098FAB6 /* Project object */;
+}
