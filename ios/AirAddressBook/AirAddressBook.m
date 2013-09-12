@@ -64,7 +64,7 @@ static AirAddressBook *sharedInstance = nil;
 - (int) hasPermission
 {
     
-    if ([self isIOS6]) {
+    if (![self isIOS6]) {
         return 1 ;
     }
     
@@ -281,7 +281,6 @@ DEFINE_ANE_FUNCTION(ane_fct_check)
     FREGetObjectAsInt32(argv[0], &temp) ;
     NSNumber *batchSize = [NSNumber numberWithInt:temp];
     [AirAddressBook log:@"%d, %@", temp, batchSize] ;
-    
     
     [[AirAddressBook sharedInstance] performSelectorInBackground:@selector(doCheck:) withObject:batchSize];
     return NULL ;
