@@ -83,12 +83,12 @@ static AirAddressBook *sharedInstance = nil;
 
 - (void) doCheck:(NSNumber *) batchSize
 {
-    
     // get addressBook pointer
     ABAddressBookRef addressBookRef = NULL;
     
     if ([self isIOS6])
     {
+        
         addressBookRef = ABAddressBookCreateWithOptions(nil,nil);
         ABAuthorizationStatus curStatus = ABAddressBookGetAuthorizationStatus();
         if (curStatus == kABAuthorizationStatusNotDetermined)
@@ -129,7 +129,7 @@ static AirAddressBook *sharedInstance = nil;
 {
     if (granted)
     {
-
+        
         CFArrayRef people = ABAddressBookCopyArrayOfAllPeople(addressBookRef);
         
         long currentLength = CFArrayGetCount(people) ;
@@ -138,7 +138,7 @@ static AirAddressBook *sharedInstance = nil;
         
         ABRecordRef contact ;
         for( int i=0; i<currentLength; ++i ) {
-
+            
             contact = CFArrayGetValueAtIndex(people, i) ;
             
             CFStringRef compositeName = ABRecordCopyCompositeName(contact);
@@ -147,13 +147,13 @@ static AirAddressBook *sharedInstance = nil;
             CFArrayRef emails = ABMultiValueCopyArrayOfAllValues( ABRecordCopyValue(contact, kABPersonEmailProperty) );
             CFArrayRef phones = ABMultiValueCopyArrayOfAllValues( ABRecordCopyValue(contact, kABPersonPhoneProperty) );
             
-            if(CFStringCompare(firstName, CFSTR("null"), kCFCompareCaseInsensitive) == kCFCompareEqualTo || CFStringCompare(firstName, CFSTR("(null)"), kCFCompareCaseInsensitive) == kCFCompareEqualTo )
+            if(!firstName || CFStringCompare(firstName, CFSTR("null"), kCFCompareCaseInsensitive) == kCFCompareEqualTo || CFStringCompare(firstName, CFSTR("(null)"), kCFCompareCaseInsensitive) == kCFCompareEqualTo )
                 firstName = CFSTR("") ;
             
-            if(CFStringCompare(lastName, CFSTR("null"), kCFCompareCaseInsensitive) == kCFCompareEqualTo || CFStringCompare(lastName, CFSTR("(null)"), kCFCompareCaseInsensitive) == kCFCompareEqualTo )
+            if(!lastName || CFStringCompare(lastName, CFSTR("null"), kCFCompareCaseInsensitive) == kCFCompareEqualTo || CFStringCompare(lastName, CFSTR("(null)"), kCFCompareCaseInsensitive) == kCFCompareEqualTo )
                 lastName = CFSTR("") ;
             
-            if(CFStringCompare(compositeName, CFSTR("null"), kCFCompareCaseInsensitive) == kCFCompareEqualTo || CFStringCompare(compositeName, CFSTR("(null)"), kCFCompareCaseInsensitive) == kCFCompareEqualTo )
+            if(!compositeName || CFStringCompare(compositeName, CFSTR("null"), kCFCompareCaseInsensitive) == kCFCompareEqualTo || CFStringCompare(compositeName, CFSTR("(null)"), kCFCompareCaseInsensitive) == kCFCompareEqualTo )
                 compositeName = CFSTR("") ;
             
             // does int exist in cache ?
@@ -199,6 +199,7 @@ static AirAddressBook *sharedInstance = nil;
                     }
                 }
             }
+            
             
             if( phones ) CFRelease(phones) ;
             if( emails ) CFRelease(emails) ;
@@ -280,7 +281,6 @@ DEFINE_ANE_FUNCTION(ane_fct_check)
     int temp = -1;
     FREGetObjectAsInt32(argv[0], &temp) ;
     NSNumber *batchSize = [NSNumber numberWithInt:temp];
-    [AirAddressBook log:@"%d, %@", temp, batchSize] ;
     
     [[AirAddressBook sharedInstance] performSelectorInBackground:@selector(doCheck:) withObject:batchSize];
     return NULL ;
