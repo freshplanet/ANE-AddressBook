@@ -135,6 +135,7 @@ static AirAddressBook *sharedInstance = nil;
         long currentLength = CFArrayGetCount(people) ;
         
         NSMutableArray *newContacts = [[NSMutableArray alloc] init] ;
+        BOOL hasNewContacts = NO ;
         
         ABRecordRef contact ;
         for( int i=0; i<currentLength; ++i ) {
@@ -165,13 +166,15 @@ static AirAddressBook *sharedInstance = nil;
                     NSString *phone = CFArrayGetValueAtIndex(phones, i) ;
                     NSString *phoneId = [NSString stringWithFormat:@"phoneNumber_%@", phone] ;
                     if ( ![self.cache containsObject:phoneId] ) {
+                        hasNewContacts = YES ;
+                        
                         NSString *serialized = [NSString stringWithFormat:@"\"%@\":{\"compositeName\":\"%@\",\"firstName\":\"%@\",\"lastName\":\"%@\"}", phoneId, compositeName, firstName, lastName] ;
                         
                         [self.cache addObject:phoneId] ;
                         [newContacts addObject:serialized] ;
                         
                         if ( [batchSize intValue] > 0 && [newContacts count] > [batchSize intValue] ) {
-                            [self dispatchContactUpdateEventwithContacts:newContacts] ;
+                            [self dispatchContactUpdateEventwithContacts:newContacts isParseEnd:false] ;
                             [newContacts removeAllObjects] ;
                         }
                         
@@ -187,13 +190,15 @@ static AirAddressBook *sharedInstance = nil;
                     NSString *email = CFArrayGetValueAtIndex(emails, i) ;
                     NSString *emailId = [NSString stringWithFormat:@"email_%@", email] ;
                     if ( ![self.cache containsObject:emailId] ) {
+                        hasNewContacts = YES ;
+                        
                         NSString *serialized = [NSString stringWithFormat:@"\"%@\":{\"compositeName\":\"%@\",\"firstName\":\"%@\",\"lastName\":\"%@\"}", emailId, compositeName, firstName, lastName] ;
                         
                         [self.cache addObject:emailId] ;
                         [newContacts addObject:serialized] ;
                         
                         if ( [batchSize intValue] > 0 && [newContacts count] > [batchSize intValue] ) {
-                            [self dispatchContactUpdateEventwithContacts:newContacts] ;
+                            [self dispatchContactUpdateEventwithContacts:newContacts isParseEnd:false] ;
                             [newContacts removeAllObjects] ;
                         }
                     }
@@ -206,7 +211,7 @@ static AirAddressBook *sharedInstance = nil;
             
         }
         
-        [self dispatchContactUpdateEventwithContacts:newContacts] ;
+        [self dispatchContactUpdateEventwithContacts:newContacts isParseEnd:hasNewContacts] ;
         
         CFRelease(people);
         
@@ -215,14 +220,15 @@ static AirAddressBook *sharedInstance = nil;
         [AirAddressBook dispatchFREEvent:ACCESS_DENIED withLevel:@""];
     }
     
-    
 }
 
-- (void) dispatchContactUpdateEventwithContacts:(NSArray*) newContacts
+- (void) dispatchContactUpdateEventwithContacts:(NSArray*) newContacts isParseEnd:(BOOL) parseEnd
 {
     int newContactsCount = [newContacts count] ;
     if (newContactsCount > 0) {
         NSMutableString *data = [NSMutableString stringWithString:@"{"] ;
+        [data appendFormat:@"\"__parseEnd\":\"%@\",",
+         (parseEnd ? @"true" : @"false")] ;
         for ( int i =0 ; i < newContactsCount ; ++i ) {
             [data appendString:newContacts[i]] ;
             if (i<newContactsCount-1) {

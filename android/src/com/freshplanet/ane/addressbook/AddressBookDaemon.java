@@ -33,6 +33,8 @@ public class AddressBookDaemon implements Runnable {
 	public void run() {
 		try{// handle interruption
 		
+		Boolean hasNewEntries = false ;
+		
 		List<String> newEntries = new LinkedList<String>() ;
 			
 		// parse phones
@@ -48,15 +50,17 @@ public class AddressBookDaemon implements Runnable {
 			stopIfInterrupted() ;
 			String phone = contactCursor.getString(0) ;
 			String compositeName = contactCursor.getString(1);
-			String phoneId = "phone_" + phone ;
+			String phoneId = "phoneNumber_" + phone ;
 			if( !contactCache.contains( phoneId ) )
 			{
+				hasNewEntries = true ;
+				
 				newEntries.add( "\""+phoneId+"\":{\"firstName\":" + (compositeName != null ? ("\""+compositeName+"\"") : "null" ) + "}" ) ;
 				contactCache.add(phoneId) ;
 				
 				if ( batchSize > 0 && newEntries.size() >= batchSize )
 				{
-					sendJSON(newEntries) ;
+					sendJSON(newEntries,false) ;
 					newEntries.clear() ;
 				}
 				
@@ -80,12 +84,14 @@ public class AddressBookDaemon implements Runnable {
 			String emailId = "email_" + email ;
 			if( !contactCache.contains( emailId ) )
 			{
+				hasNewEntries = true ;
+				
 				newEntries.add( "\""+emailId+"\":{\"firstName\":" + ((compositeName != null && compositeName != email) ? ("\""+compositeName+"\"") : "null" ) + "}" ) ;
 				contactCache.add(emailId) ;
 				
 				if ( batchSize > 0 && newEntries.size() >= batchSize )
 				{
-					sendJSON(newEntries) ;
+					sendJSON(newEntries,false) ;
 					newEntries.clear() ;
 				}
 				
@@ -95,19 +101,19 @@ public class AddressBookDaemon implements Runnable {
 		
 		callback.updateCache( contactCache ) ;
 		
-		sendJSON(newEntries) ;
+		sendJSON(newEntries, hasNewEntries) ;
 		
 		} catch(InterruptedException e) {// do nothing, we just wanted the function to end
 		}
 		
 	}
 	
-	private void sendJSON( List<String> newEntries )
+	private void sendJSON( List<String> newEntries, Boolean parseEnd )
 	{
 		
 		if( newEntries.size() > 0 )
 		{
-			String JSONret = "{" ;
+			String JSONret = "{\"__parseEnd\":\""+(parseEnd ? "true" : "false")+"\"," ;
 			for( String entry : newEntries )
 			{
 				JSONret = JSONret + entry + ',' ;

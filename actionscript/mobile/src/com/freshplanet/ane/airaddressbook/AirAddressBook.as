@@ -103,8 +103,11 @@
 				this.dispatchEvent( new Event( event.code ) ) ;
 			} else if ( event.code == CONTACTS_UPDATED ) {
 				
-				// level will contain a JSON formated string containing all new contacts' data
-				this.dispatchEvent( new AirAddressBookContactsEvent( event.level ) ) ;
+				var raw:String = event.level ;
+				var dat:Object = JSON.parse( raw ) ;
+				var isLast:Boolean = dat.hasOwnProperty('__parseEnd') && dat['__parseEnd'] ;
+				delete dat['__parseEnd'] ;
+				this.dispatchEvent( new AirAddressBookContactsEvent( dat, isLast ) ) ;
 				
 			}
 			
