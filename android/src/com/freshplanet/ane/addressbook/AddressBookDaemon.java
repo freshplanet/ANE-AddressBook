@@ -8,6 +8,7 @@ import android.content.ContentResolver;
 import android.database.Cursor;
 import android.provider.ContactsContract.CommonDataKinds.Email;
 import android.provider.ContactsContract.CommonDataKinds.Phone;
+import android.util.Log;
 
 /**
  * The daemon is the part of the ane that queries the address book
@@ -36,11 +37,11 @@ public class AddressBookDaemon implements Runnable {
 		Boolean hasNewEntries = false ;
 		
 		List<String> newEntries = new LinkedList<String>() ;
-			
+
 		// parse phones
 		Cursor contactCursor = this.contentResolver.query(
 				Phone.CONTENT_URI, 
-				new String[] { Phone.NORMALIZED_NUMBER, Phone.DISPLAY_NAME,  },
+				new String[] { Phone.NUMBER, Phone.DISPLAY_NAME,  },
 				null, null, null
 			);
 		
@@ -50,6 +51,7 @@ public class AddressBookDaemon implements Runnable {
 			stopIfInterrupted() ;
 			String phone = contactCursor.getString(0) ;
 			String compositeName = contactCursor.getString(1);
+			if ( phone == "null" || phone == null ) continue ;
 			String phoneId = "phoneNumber_" + phone ;
 			if( !contactCache.contains( phoneId ) )
 			{
@@ -81,6 +83,7 @@ public class AddressBookDaemon implements Runnable {
 			stopIfInterrupted() ;
 			String email = contactCursor.getString(0) ;
 			String compositeName = contactCursor.getString(1);
+			if ( email == null || email == "null" ) continue ;
 			String emailId = "email_" + email ;
 			if( !contactCache.contains( emailId ) )
 			{
