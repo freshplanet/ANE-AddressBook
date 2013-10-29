@@ -4,6 +4,8 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 
+import android.util.Log;
+
 import com.adobe.fre.FREContext;
 import com.adobe.fre.FREFunction;
 import com.freshplanet.ane.addressbook.functions.AddressBookFunctionCheck;
@@ -28,7 +30,9 @@ public class AddressBookContext extends FREContext implements AddressBookDaemonC
 			try {
 				// block current thread until job thread has acknowledged his interruption and returned
 				this.currentJob.join() ;
-			} catch (InterruptedException e) {}
+			} catch (InterruptedException e) {
+				Log.e(AddressBook.TAG, e.getMessage());
+			}
 		}
 	}
 
@@ -46,7 +50,7 @@ public class AddressBookContext extends FREContext implements AddressBookDaemonC
 	
 	// Functions
 	public Boolean startJob( int batchSize ) {
-		
+		Log.d(AddressBook.TAG, "entering AddressBookContext.startJob()");
 		if( currentJob != null && currentJob.isAlive() ) {
 			this.dispatchStatusEventAsync( AddressBookEvent.JOB_RUNNING, "" ) ;
 			return false ;

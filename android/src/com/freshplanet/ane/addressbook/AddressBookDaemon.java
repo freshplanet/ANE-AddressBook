@@ -4,6 +4,9 @@ import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import android.content.ContentResolver;
 import android.database.Cursor;
 import android.provider.ContactsContract.CommonDataKinds.Email;
@@ -36,7 +39,7 @@ public class AddressBookDaemon implements Runnable {
 		
 		Boolean hasNewEntries = false ;
 		
-		List<String> newEntries = new LinkedList<String>() ;
+		JSONObject newEntries = new JSONObject() ;
 
 		// parse phones
 		Cursor contactCursor = this.contentResolver.query(
@@ -56,14 +59,21 @@ public class AddressBookDaemon implements Runnable {
 			if( !contactCache.contains( phoneId ) )
 			{
 				hasNewEntries = true ;
+				JSONObject nameObj = new JSONObject();
+				try {
+					nameObj.put("firstName", compositeName != null ? compositeName : "null");
+					newEntries.put(phoneId, nameObj);
+				} catch (JSONException e) {
+					Log.e (AddressBook.TAG, e.getMessage());
+					continue;
+				}
 				
-				newEntries.add( "\""+phoneId+"\":{\"firstName\":" + (compositeName != null ? ("\""+compositeName+"\"") : "null" ) + "}" ) ;
 				contactCache.add(phoneId) ;
 				
-				if ( batchSize > 0 && newEntries.size() >= batchSize )
+				if ( batchSize > 0 && newEntries.length() >= batchSize )
 				{
 					sendJSON(newEntries,false) ;
-					newEntries.clear() ;
+					newEntries = new JSONObject();
 				}
 				
 			}
@@ -88,14 +98,20 @@ public class AddressBookDaemon implements Runnable {
 			if( !contactCache.contains( emailId ) )
 			{
 				hasNewEntries = true ;
-				
-				newEntries.add( "\""+emailId+"\":{\"firstName\":" + ((compositeName != null && compositeName != email) ? ("\""+compositeName+"\"") : "null" ) + "}" ) ;
+				JSONObject nameObj = new JSONObject();
+				try {
+					nameObj.put("firstName", (compositeName != null && compositeName != email) ? compositeName : "null");
+					newEntries.put(emailId, nameObj);
+				} catch (JSONException e) {
+					Log.e(AddressBook.TAG, e.getMessage());
+				}
+
 				contactCache.add(emailId) ;
 				
-				if ( batchSize > 0 && newEntries.size() >= batchSize )
+				if ( batchSize > 0 && newEntries.length() >= batchSize )
 				{
 					sendJSON(newEntries,false) ;
-					newEntries.clear() ;
+					newEntries = new JSONObject();
 				}
 				
 			}
@@ -111,18 +127,17 @@ public class AddressBookDaemon implements Runnable {
 		
 	}
 	
-	private void sendJSON( List<String> newEntries, Boolean parseEnd )
+	private void sendJSON( JSONObject newEntries, Boolean parseEnd ) 
 	{
 		
-		if( newEntries.size() > 0 )
+		if( newEntries.length() > 0 )
 		{
-			String JSONret = "{\"__parseEnd\":\""+(parseEnd ? "true" : "false")+"\"," ;
-			for( String entry : newEntries )
-			{
-				JSONret = JSONret + entry + ',' ;
+			try {
+				newEntries.put("__parseEnd", parseEnd);
+				callback.dispatchEvent(AddressBookEvent.CONTACTS_UPDATED, newEntries.toString()) ;
+			} catch (JSONException e) {
+				Log.e(AddressBook.TAG, e.getMessage());
 			}
-			JSONret = JSONret.substring(0, JSONret.length()-1) + '}' ;
-			callback.dispatchEvent(AddressBookEvent.CONTACTS_UPDATED, JSONret) ;
 		}
 		
 	}

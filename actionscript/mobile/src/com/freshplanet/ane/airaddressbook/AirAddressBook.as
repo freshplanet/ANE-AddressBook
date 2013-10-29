@@ -104,10 +104,15 @@
 			} else if ( event.code == CONTACTS_UPDATED ) {
 				
 				var raw:String = event.level ;
-				var dat:Object = JSON.parse( raw ) ;
-				var isLast:Boolean = dat.hasOwnProperty('__parseEnd') && dat['__parseEnd'] == "true" ;
-				delete dat['__parseEnd'] ;
-				this.dispatchEvent( new AirAddressBookContactsEvent( dat, isLast ) ) ;
+
+				try {
+					var dat:Object = JSON.parse( raw ) ;
+					var isLast:Boolean = dat.hasOwnProperty('__parseEnd') && dat['__parseEnd'] == "true" ;
+					delete dat['__parseEnd'] ;
+					this.dispatchEvent( new AirAddressBookContactsEvent( dat, isLast ) ) ;
+				} catch (e:Error) {
+					trace("[Peter][AirAddressBook] " + e.message + "\n" + raw);
+				}
 				
 			}
 			

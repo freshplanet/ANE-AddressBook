@@ -6,6 +6,7 @@ import com.adobe.fre.FREExtension;
 public class AddressBook implements FREExtension{
 	
 	private AddressBookContext context ;
+	public static final String TAG = "[AirAddressBook]";
 	
 	public FREContext createContext(String arg0){
 		if( context == null )
