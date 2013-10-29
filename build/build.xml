@@ -6,6 +6,11 @@
 
     <!-- All -->
     <target name="all" depends="android,ios,ios-simulator,swc-mobile,swc-default,package" description="Full build of extension"/>
+    
+    <target name="all-android-debug" 
+        depends="android-debug,ios,ios-simulator,swc-mobile,swc-default,package" 
+        description="Full build of extension w/debugging on Android"
+    />
 
     <!-- iOS -->
     <target name="ios" description="Build iOS Library">
@@ -53,13 +58,13 @@
     </target>
 
     <!-- Android -->
-    <target name="android" description="Build Android Library">
+    <target name="android-build" description="Build Android Library">
         <delete dir="../android/temp"/>
         <mkdir dir="../android/temp/classes"/>
 
         <echo message="Using Java version ${ant.java.version}."/>
 
-        <javac source="1.6" srcdir="../android/src" destdir="../android/temp/classes" includeantruntime="false">
+        <javac source="1.6" srcdir="../android/src" destdir="../android/temp/classes" includeantruntime="false" debug="${ANDROID_DEBUG}">
             <classpath>
                 <pathelement location="${android.sdk}/android.jar"/>
                 <pathelement location="${flex.sdk}/lib/android/FlashRuntimeExtensions.jar"/>
@@ -79,6 +84,16 @@
         </copy> -->
         <delete dir="../android/temp"/>
     </target>
+
+    <target name="android" description="Build Android Library with debugging disabled">
+        <property name="ANDROID_DEBUG" value="false"/>
+        <antcall target="android-build"/>
+    </target>
+    <target name="android-debug" description="Build Android Library with debugging enabled">
+        <property name="ANDROID_DEBUG" value="true"/>
+        <antcall target="android-build"/>
+    </target>
+
 
     <!-- Actionscript mobile -->
     <target name="swc-mobile" description="Build SWC library">
