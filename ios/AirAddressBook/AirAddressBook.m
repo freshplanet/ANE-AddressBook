@@ -6,6 +6,7 @@
 //  Copyright (c) 2013 Freshplanet. All rights reserved.
 //
 
+#import <util.h>
 #import "AirAddressBook.h"
 
 FREContext AirCtx = nil;
@@ -134,7 +135,7 @@ static AirAddressBook *sharedInstance = nil;
         
         long currentLength = CFArrayGetCount(people) ;
         
-        NSMutableArray *newContacts = [[NSMutableArray alloc] init] ;
+        NSMutableDictionary *newContacts = [[NSMutableDictionary alloc] init] ;
         BOOL hasNewContacts = NO ;
         
         ABRecordRef contact ;
@@ -142,20 +143,21 @@ static AirAddressBook *sharedInstance = nil;
             
             contact = CFArrayGetValueAtIndex(people, i) ;
             
-            CFStringRef compositeName = ABRecordCopyCompositeName(contact);
-            CFStringRef firstName = ABRecordCopyValue(contact, kABPersonFirstNameProperty);
-            CFStringRef lastName = ABRecordCopyValue(contact, kABPersonLastNameProperty);
+            NSString * compositeName = (__bridge NSString *) ABRecordCopyCompositeName(contact);
+            NSString * firstName = (__bridge NSString *)ABRecordCopyValue(contact, kABPersonFirstNameProperty);
+            NSString * lastName = (__bridge NSString *)ABRecordCopyValue(contact, kABPersonLastNameProperty);
             CFArrayRef emails = ABMultiValueCopyArrayOfAllValues( ABRecordCopyValue(contact, kABPersonEmailProperty) );
             CFArrayRef phones = ABMultiValueCopyArrayOfAllValues( ABRecordCopyValue(contact, kABPersonPhoneProperty) );
             
-            if(!firstName || CFStringCompare(firstName, CFSTR("null"), kCFCompareCaseInsensitive) == kCFCompareEqualTo || CFStringCompare(firstName, CFSTR("(null)"), kCFCompareCaseInsensitive) == kCFCompareEqualTo )
-                firstName = CFSTR("") ;
+            if(!firstName || [firstName caseInsensitiveCompare:@"null"] == NSOrderedSame || [firstName caseInsensitiveCompare:@"(null)"] == NSOrderedSame)
+                firstName = @"" ;
+                
+            if(!lastName || [lastName caseInsensitiveCompare:@"null"] == NSOrderedSame || [lastName caseInsensitiveCompare:@"(null)"] == NSOrderedSame)
+                lastName = @"" ;
+                
+            if(!compositeName || [compositeName caseInsensitiveCompare:@"null"] == NSOrderedSame || [compositeName caseInsensitiveCompare:@"(null)"] == NSOrderedSame)
+                compositeName = @"" ;
             
-            if(!lastName || CFStringCompare(lastName, CFSTR("null"), kCFCompareCaseInsensitive) == kCFCompareEqualTo || CFStringCompare(lastName, CFSTR("(null)"), kCFCompareCaseInsensitive) == kCFCompareEqualTo )
-                lastName = CFSTR("") ;
-            
-            if(!compositeName || CFStringCompare(compositeName, CFSTR("null"), kCFCompareCaseInsensitive) == kCFCompareEqualTo || CFStringCompare(compositeName, CFSTR("(null)"), kCFCompareCaseInsensitive) == kCFCompareEqualTo )
-                compositeName = CFSTR("") ;
             
             // does int exist in cache ?
             if( phones!=NULL )
@@ -168,10 +170,11 @@ static AirAddressBook *sharedInstance = nil;
                     if ( ![self.cache containsObject:phoneId] ) {
                         hasNewContacts = YES ;
                         
-                        NSString *serialized = [NSString stringWithFormat:@"\"%@\":{\"compositeName\":\"%@\",\"firstName\":\"%@\",\"lastName\":\"%@\"}", phoneId, compositeName, firstName, lastName] ;
+                        NSMutableDictionary *phoneEntry = [NSMutableDictionary dictionaryWithObjectsAndKeys:
+                                                           compositeName, @"compositeName", firstName, @"firstName", lastName, @"lastName", nil];
                         
                         [self.cache addObject:phoneId] ;
-                        [newContacts addObject:serialized] ;
+                        [newContacts setValue:phoneEntry forKey:phoneId] ;
                         
                         if ( [batchSize intValue] > 0 && [newContacts count] > [batchSize intValue] ) {
                             [self dispatchContactUpdateEventwithContacts:newContacts isParseEnd:false] ;
@@ -192,10 +195,12 @@ static AirAddressBook *sharedInstance = nil;
                     if ( ![self.cache containsObject:emailId] ) {
                         hasNewContacts = YES ;
                         
-                        NSString *serialized = [NSString stringWithFormat:@"\"%@\":{\"compositeName\":\"%@\",\"firstName\":\"%@\",\"lastName\":\"%@\"}", emailId, compositeName, firstName, lastName] ;
+                        
+                        NSMutableDictionary *emailEntry = [NSMutableDictionary dictionaryWithObjectsAndKeys:
+                                                            compositeName, @"compositeName", firstName, @"firstName", lastName, @"lastName", nil];
                         
                         [self.cache addObject:emailId] ;
-                        [newContacts addObject:serialized] ;
+                        [newContacts setValue:emailEntry forKey:emailId] ;
                         
                         if ( [batchSize intValue] > 0 && [newContacts count] > [batchSize intValue] ) {
                             [self dispatchContactUpdateEventwithContacts:newContacts isParseEnd:false] ;
@@ -222,21 +227,21 @@ static AirAddressBook *sharedInstance = nil;
     
 }
 
-- (void) dispatchContactUpdateEventwithContacts:(NSArray*) newContacts isParseEnd:(BOOL) parseEnd
+- (void) dispatchContactUpdateEventwithContacts:(NSDictionary *) newContacts isParseEnd:(BOOL) parseEnd
 {
     int newContactsCount = [newContacts count] ;
     if (newContactsCount > 0) {
-        NSMutableString *data = [NSMutableString stringWithString:@"{"] ;
-        [data appendFormat:@"\"__parseEnd\":\"%@\",",
-         (parseEnd ? @"true" : @"false")] ;
-        for ( int i =0 ; i < newContactsCount ; ++i ) {
-            [data appendString:newContacts[i]] ;
-            if (i<newContactsCount-1) {
-                [data appendString:@","] ;
-            }
+        [newContacts setValue:parseEnd ? @"true" : @"false" forKey:@"__parseEnd"];
+        NSError *jsonError = nil;
+        NSData *jsonData = [NSJSONSerialization dataWithJSONObject:newContacts options:0 error:&jsonError];
+        if (jsonError != nil) {
+            NSLog(@"[AirAddressBook] JSON stringify error: %@", jsonError.localizedDescription);
+            return;
         }
-        [data appendString:@"}"] ;
-        [AirAddressBook dispatchFREEvent:CONTACTS_UPDATED withLevel:data] ;
+        
+        NSString *outputString = [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
+        
+        [AirAddressBook dispatchFREEvent:CONTACTS_UPDATED withLevel:outputString] ;
     }
 }
 
