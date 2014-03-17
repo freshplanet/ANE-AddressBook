@@ -10,9 +10,10 @@
 	public class AirAddressBook extends EventDispatcher
 	{
 		
-		
+		public static const JOB_STARTED:String = "job_started";
 		public static const CONTACTS_UPDATED:String = "contacts_updated" ;
 		public static const JOB_RUNNING:String = "job_running" ;
+		public static const JOB_FINISHED:String = "job_finished";
 		public static const ACCESS_DENIED:String = "access_denied" ;
 		public static const ACCESS_GRANTED:String = "access_granted" ;
 		
@@ -99,7 +100,7 @@
 				event.code == ACCESS_DENIED
 			) {
 				this.dispatchEvent( new ErrorEvent(event.code) ) ;
-			} else if ( event.code == ACCESS_GRANTED ){
+			} else if ( event.code == ACCESS_GRANTED || event.code == JOB_STARTED || event.code == JOB_FINISHED){
 				this.dispatchEvent( new Event( event.code ) ) ;
 			} else if ( event.code == CONTACTS_UPDATED ) {
 				

@@ -9,7 +9,9 @@
 	{
 		
 		public static const CONTACTS_UPDATED:String = "contacts_updated" ;
+		public static const JOB_STARTED:String = "job_started" ;
 		public static const JOB_RUNNING:String = "job_running" ;
+		public static const JOB_FINISHED:String = "job_finished" ;
 		public static const ACCESS_DENIED:String = "access_denied" ;
 		public static const ACCESS_GRANTED:String = "access_granted" ;
 
