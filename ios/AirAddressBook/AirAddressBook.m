@@ -12,8 +12,9 @@
 FREContext AirCtx = nil;
 
 NSString *const CONTACTS_UPDATED = @"contacts_updated" ;
-
+NSString *const JOB_STARTED = @"job_started" ;
 NSString *const JOB_RUNNING = @"job_running" ;
+NSString *const JOB_FINISHED = @"job_finished" ;
 NSString *const ACCESS_DENIED = @"access_denied" ;
 NSString *const ACCESS_GRANTED = @"access_granted" ;
 
@@ -130,6 +131,7 @@ static AirAddressBook *sharedInstance = nil;
 {
     if (granted)
     {
+        [AirAddressBook dispatchFREEvent:JOB_STARTED withLevel:@""];
         
         CFArrayRef people = ABAddressBookCopyArrayOfAllPeople(addressBookRef);
         
@@ -217,6 +219,8 @@ static AirAddressBook *sharedInstance = nil;
         }
         
         [self dispatchContactUpdateEventwithContacts:newContacts isParseEnd:hasNewContacts] ;
+        
+        [AirAddressBook dispatchFREEvent:JOB_FINISHED withLevel:@""];
         
         CFRelease(people);
         

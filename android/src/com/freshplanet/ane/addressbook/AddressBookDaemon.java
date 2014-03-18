@@ -30,16 +30,18 @@ public class AddressBookDaemon implements Runnable {
 		this.contentResolver = contentResolver ;
 		this.callback = callback ;
 		this.batchSize = batchSize ;
-		
 	}
 	
 	@Override
 	public void run() {
 		try{// handle interruption
 		
+		callback.dispatchEvent(AddressBookEvent.JOB_STARTED, "");
+			
 		Boolean hasNewEntries = false ;
 		
 		JSONObject newEntries = new JSONObject() ;
+		
 
 		// parse phones
 		Cursor contactCursor = this.contentResolver.query(
@@ -122,7 +124,15 @@ public class AddressBookDaemon implements Runnable {
 		
 		sendJSON(newEntries, hasNewEntries) ;
 		
-		} catch(InterruptedException e) {// do nothing, we just wanted the function to end
+		
+		} 
+		catch(InterruptedException e) 
+		{
+			// do nothing, we just wanted the function to end
+		} 
+		finally 
+		{
+			callback.dispatchEvent(AddressBookEvent.JOB_FINISHED, "");
 		}
 		
 	}
